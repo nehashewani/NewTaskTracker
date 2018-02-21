@@ -1,3 +1,11 @@
+<%= if @current_user do %>
+	<div class="row">
+		<div class="col">
+			<h2> Welcome To Task Tracker</h2>
+			<p> Please use the navigation links to explore the application</p>
+		</div>
+	</div>
+<%= else %>
 <div class="row">
   <div class="col">
   <h1>Tracker User: Log In</h1>
@@ -15,3 +23,4 @@
     <% end %>
   </div>
 </div>
+<% end %>
