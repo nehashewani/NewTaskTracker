@@ -1,0 +1,32 @@
+<h2>Listing Taskdetails</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Desciption</th>
+      <th>Completion status</th>
+      <th>Time(HH:MM)</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for task_trackers <- @taskdetails do %>
+    <tr>
+      <td><%= task_trackers.title %></td>
+      <td><%= task_trackers.desciption %></td>
+      <td><%= task_trackers.completion_status %></td>
+      <td><%= div(task_trackers.time,60) %>:<%= rem(task_trackers.time,60) %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: task_trackers_path(@conn, :show, task_trackers), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: task_trackers_path(@conn, :edit, task_trackers), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: task_trackers_path(@conn, :delete, task_trackers), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Task trackers", to: task_trackers_path(@conn, :new) %></span>

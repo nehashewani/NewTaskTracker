@@ -1,0 +1,5 @@
+<h2>Edit Task trackers</h2>
+
+<%= render "form.html", Map.put(assigns, :action, task_trackers_path(@conn, :update, @task_trackers)) %>
+
+<span><%= link "Back", to: task_trackers_path(@conn, :index) %></span>

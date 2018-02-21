@@ -1,0 +1,71 @@
+defmodule Tracker.TaskDetailTest do
+  use Tracker.DataCase
+
+  alias Tracker.TaskDetail
+
+  describe "taskdetails" do
+    alias Tracker.TaskDetail.TaskTrackers
+
+    @valid_attrs %{completion_status: true, desciption: "some desciption", time: 42, title: "some title"}
+    @update_attrs %{completion_status: false, desciption: "some updated desciption", time: 43, title: "some updated title"}
+    @invalid_attrs %{completion_status: nil, desciption: nil, time: nil, title: nil}
+
+    def task_trackers_fixture(attrs \\ %{}) do
+      {:ok, task_trackers} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> TaskDetail.create_task_trackers()
+
+      task_trackers
+    end
+
+    test "list_taskdetails/0 returns all taskdetails" do
+      task_trackers = task_trackers_fixture()
+      assert TaskDetail.list_taskdetails() == [task_trackers]
+    end
+
+    test "get_task_trackers!/1 returns the task_trackers with given id" do
+      task_trackers = task_trackers_fixture()
+      assert TaskDetail.get_task_trackers!(task_trackers.id) == task_trackers
+    end
+
+    test "create_task_trackers/1 with valid data creates a task_trackers" do
+      assert {:ok, %TaskTrackers{} = task_trackers} = TaskDetail.create_task_trackers(@valid_attrs)
+      assert task_trackers.completion_status == true
+      assert task_trackers.desciption == "some desciption"
+      assert task_trackers.time == 42
+      assert task_trackers.title == "some title"
+    end
+
+    test "create_task_trackers/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = TaskDetail.create_task_trackers(@invalid_attrs)
+    end
+
+    test "update_task_trackers/2 with valid data updates the task_trackers" do
+      task_trackers = task_trackers_fixture()
+      assert {:ok, task_trackers} = TaskDetail.update_task_trackers(task_trackers, @update_attrs)
+      assert %TaskTrackers{} = task_trackers
+      assert task_trackers.completion_status == false
+      assert task_trackers.desciption == "some updated desciption"
+      assert task_trackers.time == 43
+      assert task_trackers.title == "some updated title"
+    end
+
+    test "update_task_trackers/2 with invalid data returns error changeset" do
+      task_trackers = task_trackers_fixture()
+      assert {:error, %Ecto.Changeset{}} = TaskDetail.update_task_trackers(task_trackers, @invalid_attrs)
+      assert task_trackers == TaskDetail.get_task_trackers!(task_trackers.id)
+    end
+
+    test "delete_task_trackers/1 deletes the task_trackers" do
+      task_trackers = task_trackers_fixture()
+      assert {:ok, %TaskTrackers{}} = TaskDetail.delete_task_trackers(task_trackers)
+      assert_raise Ecto.NoResultsError, fn -> TaskDetail.get_task_trackers!(task_trackers.id) end
+    end
+
+    test "change_task_trackers/1 returns a task_trackers changeset" do
+      task_trackers = task_trackers_fixture()
+      assert %Ecto.Changeset{} = TaskDetail.change_task_trackers(task_trackers)
+    end
+  end
+end

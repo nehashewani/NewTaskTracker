@@ -1,0 +1,37 @@
+<h2>Show Task trackers</h2>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @task_trackers.title %>
+  </li>
+
+  <li>
+    <strong>Desciption:</strong>
+    <%= @task_trackers.desciption %>
+  </li>
+
+  <li>
+    <strong>Completion status:</strong>
+    <%= @task_trackers.completion_status %>
+  </li>
+
+  <li>
+    <strong>Hours:</strong>
+    <%= div(@task_trackers.time,60) %>
+  </li>
+ 
+  <li>
+     <strong>Minutes</strong>
+     <%= rem(@task_trackers.time, 60) %>
+  </li>
+
+  <li>
+    <strong>User:</strong>
+    <%= @task_trackers.user.email %>
+  </li>
+</ul>
+
+<span><%= link "Edit", to: task_trackers_path(@conn, :edit, @task_trackers) %></span>
+<span><%= link "Back", to: task_trackers_path(@conn, :index) %></span>

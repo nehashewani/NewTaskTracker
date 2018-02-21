@@ -1,0 +1,16 @@
+<%= if @current_user do %>
+<div class="row">
+	<h2> Welcome <%= @current_user.name %></h2>
+</div>
+<div class="row">
+	<div class="col-3">
+		<ul>
+			<li> My Tasks </li>
+			<li> Details </li>
+		</ul>
+	</div>
+</div>
+<% else %>
+	<h2 style="color:red"> Login</h2>
+<% end %>
+
