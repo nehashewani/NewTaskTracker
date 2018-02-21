@@ -16,4 +16,7 @@ Design choices - Functionality:
 5. "admin" has rights to view the list of all the users
 6. creating/editing a task has hours and minutes(15 min interval) input boxes. which accepts the use input  as hours and minutes, converts them into mintues and stores it to the database.
 7. when showing the task details, the time is extracted from database and again segregated to hours and minutes to show it to the user for user convinience.
-8. When the "admin" tries to delete the user, who has assigned tasks, error message is thrown.  
+8. When the "admin" tries to delete the user, who has assigned tasks, error message is thrown. 
+9. admin login credentials :
+   name : admin
+   email : admin@admin.com 
