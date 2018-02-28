@@ -28,6 +28,7 @@ defmodule TrackerWeb.Router do
     get "/", PageController, :index
     get "/home", PageController, :userhome
     resources "/users", UserController
+    get "/taskdetails/time", TaskTrackersController, :editime
     resources "/taskdetails", TaskTrackersController
     get "/tasks", PageController, :tasks
     post "/session", SessionController, :create
@@ -40,6 +41,7 @@ defmodule TrackerWeb.Router do
     put "/timeblocks", TimeBlockController, :update
     delete "/timeblocks", TimeBlockController, :delete
     post "/timeblocks/delete", TimeBlockController, :delete
+    post "/timeblocks/update", TimeBlockController, :updatetime
   end
   # Other scopes may use custom stacks.
   # scope "/api", TrackerWeb do

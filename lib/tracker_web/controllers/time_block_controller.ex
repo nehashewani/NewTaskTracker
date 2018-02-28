@@ -34,6 +34,16 @@ defmodule TrackerWeb.TimeBlockController do
     end
   end
 
+  def updatetime(conn, %{"id" => id, "time_block" => time_block_params}) do
+    time_block = TaskDetail.get_time_block!(id)
+
+    with {:ok, %TimeBlock{} = time_block} <- TaskDetail.update_time_block(time_block, time_block_params) do
+      conn
+      #|> put_flash(:info, "Deleted")
+      |> redirect(to: task_trackers_path(conn, :show, time_block.taskdetails_id))
+    end
+  end
+
   def delete(conn, %{"id" => id}) do
     time_block = TaskDetail.get_time_block!(id)
     with {:ok, %TimeBlock{}} <- TaskDetail.delete_time_block(time_block) do

@@ -1,0 +1,15 @@
+<form method="POST" action="/api/v1/timeblocks/update">
+<input type="hidden" name="id" value="<%= @time_block.id %>" />
+<input type="hidden" name="time_block[taskdetails_id]" value="<%= @time_block.taskdetails_id %>" />
+<div class="form-group">
+  <label for="start_time" class= "control-label"> Start Time</label>
+  <input type="texts" name="time_block[start_time]" class="form-control" value="<%= @time_block.start_time %>"/>
+</div>
+<div class="form-group">
+  <label for="end_time" class= "control-label"> End Time</label>
+  <input type="text" name="time_block[end_time]" class="form-control" value="<%= @time_block.end_time %>"/>
+</div>
+<div class="form-group">
+  <%= submit "Submit", class: "btn btn-primary" %>
+</div>
+</form>

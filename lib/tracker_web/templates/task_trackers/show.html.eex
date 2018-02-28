@@ -59,7 +59,9 @@
         <td><%= tim.start_time %></td>
         <td><%= tim.end_time %></td>
         <td>
+
           <form method="post" action="/api/v1/timeblocks/delete">
+          <a class="btn btn-default btn-xs" href="/taskdetails/time?id=<%= tim.id %>"> Edit </a>
             <input type="hidden" name="id" value=<%= tim.id %> />
             <input type="submit" class="btn btn-danger" data-time-block-id = <%= tim.id %> value="Delete"/>
           </form>

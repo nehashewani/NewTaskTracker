@@ -103,4 +103,8 @@ defmodule TrackerWeb.TaskTrackersController do
     Ecto.assoc(user, :taskdetails)
   end
 
+  def editime(conn, %{"id" => id}) do
+    time_block = TaskDetail.get_time_block!(id)
+    render(conn, "time.html", time_block: time_block)
+  end
 end
