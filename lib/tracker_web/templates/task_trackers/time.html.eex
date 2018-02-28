@@ -13,3 +13,4 @@
   <%= submit "Submit", class: "btn btn-primary" %>
 </div>
 </form>
+<span><%= link "Back", to: task_trackers_path(@conn, :index) %></span>
