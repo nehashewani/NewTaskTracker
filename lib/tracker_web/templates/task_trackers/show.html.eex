@@ -21,7 +21,7 @@
     <strong>Hours:</strong>
     <%= div(@task_trackers.time,60) %>
   </li>
- 
+
   <li>
      <strong>Minutes</strong>
      <%= rem(@task_trackers.time, 60) %>
@@ -31,7 +31,111 @@
     <strong>User:</strong>
     <%= @task_trackers.user.email %>
   </li>
+
+  <%= if @current_user != nil and @task_trackers.completion_status == false and @current_user.id == @task_trackers.user.id do %>
+ 	<li>
+    <%= if Enum.count(@active_time_blocks) > 0 do %>
+      <button id="taskStart" class="btn btn-danger" data-taskid=<%= @task_trackers.id %> data-time-block-id=<%= Enum.at(@active_time_blocks, 0).id %> >Stop</button>
+    <% else %>
+      <button id="taskStart" class="btn btn-success"  data-taskid=<%= @task_trackers.id %> >Start</button>
+    <% end %>
+  </li>
+  <% end %>
 </ul>
+
+<h3> Time </h3>
+<table class="table" id="time">
+  <thead>
+    <tr>
+      <th> Start Time </th>
+      <th>End Time</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= if Enum.count(@time_blocks) > 0 do %>
+      <%= for tim <- @time_blocks do %>
+      <tr data-time-block-id = <%= tim.id %>>
+        <td><%= tim.start_time %></td>
+        <td><%= tim.end_time %></td>
+        <td>
+          <form method="post" action="/api/v1/timeblocks/delete">
+            <input type="hidden" name="id" value=<%= tim.id %> />
+            <input type="submit" class="btn btn-danger" data-time-block-id = <%= tim.id %> value="Delete"/>
+          </form>
+        </td>
+      </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
 
 <span><%= link "Edit", to: task_trackers_path(@conn, :edit, @task_trackers) %></span>
 <span><%= link "Back", to: task_trackers_path(@conn, :index) %></span>
+<script>
+	$(function(){
+
+
+		$("#taskStart").click(function(){
+
+
+
+      var type = $("#taskStart").text();
+      if( type.trim().toLowerCase() == "start"){
+        var ajaxData ={
+          "time_block":{
+            "taskdetails_id": $("#taskStart").data("taskid"),
+            "start_time":new Date()
+          }
+        };
+  			$.ajax('/api/v1/timeblocks',{
+          method:"post",
+          dataType:"json",
+          contentType: "application/json; charset=UTF-8",
+          data: JSON.stringify(ajaxData),
+          success:function(resp){
+            if(resp.data.id != undefined){
+              var html = "<tr data-time-block-id='" + resp.data.id+ "'>";
+              html += "<td>" + resp.data.start_time + "</td>";
+              html += "<td></td>";
+              html += '<td><form method="post" action="/api/v1/timeblocks/delete"><input type="submit" value="Delete" class="btn btn-danger" data-time-block-id="' +resp.data.id + '"/>'+
+              '<input type="hidden" name="id" value="'+ resp.data.id +'" /></form></td>';
+              html += '</tr>';
+              $("table tbody").append(html);
+              $("#taskStart").text("Stop");
+              $("#taskStart").removeClass("btn-success");
+              $("#taskStart").addClass("btn-danger");
+              $("#taskStart").data("time-block-id",resp.data.id);
+              alert("Task Started!");
+            }
+          }
+        });
+      }
+      else{
+        var ajaxData = {
+          "id": $("#taskStart").data("time-block-id"),
+          "time_block":{
+            "taskdetails_id": $("#taskStart").data("taskid"),
+            "end_time":new Date()
+          }
+        };
+
+        $.ajax('/api/v1/timeblocks',{
+          method:"put",
+          dataType:"json",
+          contentType: "application/json; charset=UTF-8",
+          data: JSON.stringify(ajaxData),
+          success:function(resp){
+            if(resp.data.id != undefined){
+              $("#taskStart").text("Start");
+              $("#taskStart").removeClass("btn-danger");
+              $("#taskStart").addClass("btn-success");
+              $($("tr[data-time-block-id=" + resp.data.id+"] td")[1]).html(resp.data.end_time);
+              alert("Task Stopped!");
+            }
+          }
+        });
+      }
+		});
+	});
+</script>

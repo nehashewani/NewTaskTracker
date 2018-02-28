@@ -21,6 +21,16 @@ defmodule Tracker.Accounts do
     Repo.all(User)
   end
 
+  def list_users(id) do
+  	query = from u in User, where: u.id != ^id, where: is_nil(u.manager_id) or u.manager_id != ^id
+      Repo.all(query)
+  end
+
+  def get_employees(id) do
+  	query = from u in User, where: u.manager_id == ^id
+	Repo.all(query)
+  end
+
   @doc """
   Gets a single user.
 
@@ -35,17 +45,17 @@ defmodule Tracker.Accounts do
       ** (Ecto.NoResultsError)
 
   """
- def get_user!(id), do: Repo.get!(User, id) 
+ def get_user!(id), do: Repo.get!(User, id) |> Repo.preload(:manager)
 
- def get_user(id), do: Repo.get(User, id)
+ def get_user(id), do: Repo.get(User, id) |> Repo.preload(:manager)
 
 
   def get_user_by_email(email) do
-   user = Repo.get_by(User, email: email)
+   user = Repo.get_by(User, email: email) |> Repo.preload(:manager)
     if user do
       user
     else
-    user = Repo.get_by(User, name: email)
+    user = Repo.get_by(User, name: email) |> Repo.preload(:manager)
       user
     end
   end

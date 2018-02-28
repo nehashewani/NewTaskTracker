@@ -1,8 +1,8 @@
 #!/bin/bash
 
-export PORT=5200
+export PORT=5300
 export MIX_ENV=prod
-export GIT_PATH=/home/memory/tracker 
+export GIT_PATH=/home/memory/tracker2 
 
 PWD=`pwd`
 if [ $PWD != $GIT_PATH ]; then
@@ -27,17 +27,17 @@ mkdir -p ~/www
 mkdir -p ~/old
 
 NOW=`date +%s`
-if [ -d ~/www/tracker ]; then
-	echo mv ~/www/tracker ~/old/$NOW
-	mv ~/www/tracker ~/old/$NOW
+if [ -d ~/www/tracker2 ]; then
+	echo mv ~/www/tracker2 ~/old/$NOW
+	mv ~/www/tracker2 ~/old/$NOW
 fi
 
-mkdir -p ~/www/tracker
-REL_TAR=~/tracker/_build/prod/rel/tracker/releases/0.0.1/tracker.tar.gz
-(cd ~/www/tracker && tar xzvf $REL_TAR)
+mkdir -p ~/www/tracker2
+REL_TAR=~/tracker2/_build/prod/rel/tracker/releases/0.0.1/tracker.tar.gz
+(cd ~/www/tracker2 && tar xzvf $REL_TAR)
 
 crontab - <<CRONTAB
-@reboot bash /home/memory/tracker/start.sh
+@reboot bash /home/memory/tracker2/start.sh
 CRONTAB
 
 #. start.sh

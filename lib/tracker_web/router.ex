@@ -34,6 +34,13 @@ defmodule TrackerWeb.Router do
     delete "/session", SessionController, :delete
   end
 
+  scope "api/v1", TrackerWeb do
+    pipe_through :api
+    resources "/timeblocks", TimeBlockController, except: [:new, :edit]
+    put "/timeblocks", TimeBlockController, :update
+    delete "/timeblocks", TimeBlockController, :delete
+    post "/timeblocks/delete", TimeBlockController, :delete
+  end
   # Other scopes may use custom stacks.
   # scope "/api", TrackerWeb do
   #   pipe_through :api

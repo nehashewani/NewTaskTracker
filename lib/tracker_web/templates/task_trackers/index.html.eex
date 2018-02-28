@@ -30,3 +30,36 @@
 </table>
 
 <span><%= link "New Task trackers", to: task_trackers_path(@conn, :new) %></span>
+
+<%= if @emptasks != nil and Enum.count(@emptasks) > 0 do %>
+<h2> Employee Tasks</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Desciption</th>
+      <th>Completion status</th>
+      <th>Time(HH:MM)</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for emptask <- @emptasks do %>
+    <tr>
+      <td><%= emptask.title %></td>
+      <td><%= emptask.desciption %></td>
+      <td><%= emptask.completion_status %></td>
+      <td><%= div(emptask.time,60) %>:<%= rem(emptask.time,60) %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: task_trackers_path(@conn, :show, emptask), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: task_trackers_path(@conn, :edit, emptask), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: task_trackers_path(@conn, :delete, emptask), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+<% end %>

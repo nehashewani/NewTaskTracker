@@ -10,12 +10,14 @@ defmodule TrackerWeb.UserController do
     render(conn, "index.html", users: users)
   end
 
-  def new(conn, _params) do
+  def new(conn, _params) do 
+    users = Tracker.Accounts.list_users() |> Enum.map(&{&1.name, &1.id})
     changeset = Accounts.change_user(%User{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html", changeset: changeset, users: users)
   end
 
   def create(conn, %{"user" => user_params}) do
+    IO.puts(inspect(user_params))
     case Accounts.create_user(user_params) do
       {:ok, user} ->
         conn
@@ -28,13 +30,17 @@ defmodule TrackerWeb.UserController do
 
   def show(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
-    render(conn, "show.html", user: user)
+    emps = Accounts.get_employees(id)
+    render(conn, "show.html", user: user, emps: emps)
   end
 
   def edit(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
+    users = Tracker.Accounts.list_users(id) 
+	    |> Enum.filter(fn(x) -> x.id != id end)
+	    |> Enum.map(&{&1.name, &1.id})
     changeset = Accounts.change_user(user)
-    render(conn, "edit.html", user: user, changeset: changeset)
+    render(conn, "edit.html", user: user, changeset: changeset, users: users)
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do

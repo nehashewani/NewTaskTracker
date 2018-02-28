@@ -12,7 +12,31 @@
     <%= @user.name %>
   </li>
 
+  <li>
+     <strong>Manager:</strong>
+     <%= if @user.manager != nil do %>
+     <%= @user.manager.name %>
+     <% end %>
+  </li>
+
+
+  <li><strong>Managing Employees</strong><br/>
+	<table class="table">
+		<thead>
+		<tr>
+			<th>Name</th>
+			<th>Email</th>
+		</tr>
+		</thead>
+		<%= for emp <- @emps do %>
+		<tr>
+			<td><%= emp.name %></td>
+			<td><%= emp.email %></td>
+		</tr>
+		<%= end %>
+	</table>
+  </li>
+
 </ul>
 
 <span><%= link "Edit", to: user_path(@conn, :edit, @user) %></span>
-

@@ -12,6 +12,7 @@ defmodule Tracker.TaskDetail.TaskTrackers do
     field :title, :string
     #field :user_id, :id
     belongs_to :user, User
+    has_many :timeblocks, TimeBlock, foreign_key: :taskdetails_id
     timestamps()
   end
 

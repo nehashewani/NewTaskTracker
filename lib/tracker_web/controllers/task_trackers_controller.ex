@@ -11,20 +11,22 @@ defmodule TrackerWeb.TaskTrackersController do
 
   def index(conn, _params) do
     taskdetails = nil
+    emptasks = nil
     IO.puts(inspect(conn.assigns[:current_user]))
     if conn.assigns[:current_user].name == "admin" do
     	taskdetails = TaskDetail.list_taskdetails()
     else
     	taskdetails = make_assoc(conn.assigns[:current_user]) |> Tracker.Repo.all()
+      emptasks = TaskDetail.get_employee_tasks(conn.assigns[:current_user].id)
     end
-    render(conn, "index.html", taskdetails: taskdetails)
+    render(conn, "index.html", taskdetails: taskdetails, emptasks: emptasks)
   end
 
   def new(conn, _params) do
     #changeset = TaskDetail.change_task_trackers(%TaskTrackers{})
-    users = Tracker.Accounts.list_users() |> Enum.map(&{&1.name, &1.id})
-
     user_tasks =  conn.assigns[:current_user]
+    users = Tracker.Accounts.get_employees(user_tasks.id) |> Enum.map(&{&1.name, &1.id})
+
 
     #changeset = Tracker.TaskDetail.change_task_trackers(Tracker.TaskDetail.TaskTrackers)
     #render conn, "tasks.html", changeset: changeset, users: users
@@ -54,13 +56,16 @@ defmodule TrackerWeb.TaskTrackersController do
 
   def show(conn, %{"id" => id}) do
     task_trackers = TaskDetail.get_task_trackers!(id)
-    render(conn, "show.html", task_trackers: task_trackers)
+    time_blocks = TaskDetail.get_time_block_by_task_id(id)
+    active_time_blocks = TaskDetail.get_active_time_block_by_task_id(id)
+    render(conn, "show.html", task_trackers: task_trackers, time_blocks: time_blocks, active_time_blocks: active_time_blocks)
   end
 
   def edit(conn, %{"id" => id}) do
     task_trackers = TaskDetail.get_task_trackers!(id)
     IO.puts(inspect(task_trackers))
-    users = Tracker.Accounts.list_users() |> Enum.map(&{&1.name, &1.id})
+    user = conn.assigns[:current_user]
+    users = Tracker.Accounts.get_employees(user.id) |> Enum.map(&{&1.name, &1.id})
     changeset = TaskDetail.change_task_trackers(task_trackers)
     time_val = Ecto.Changeset.get_field(changeset, :time)
     changeset = Ecto.Changeset.put_change(changeset, :time, div(time_val, 60))
@@ -93,7 +98,7 @@ defmodule TrackerWeb.TaskTrackersController do
     |> put_flash(:info, "Task trackers deleted successfully.")
     |> redirect(to: task_trackers_path(conn, :index))
   end
-  
+
   def make_assoc(user) do
     Ecto.assoc(user, :taskdetails)
   end

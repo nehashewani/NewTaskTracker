@@ -7,8 +7,8 @@ use Mix.Config
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
 config :tracker, TrackerWeb.Endpoint,
-  http: [port: 5200],
- # http: [port: {:system, "PORT"}],
+ # http: [port: 5200],
+  http: [port: {:system, "PORT"}],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
@@ -54,6 +54,6 @@ config :tracker, Tracker.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "tracker",
   password: "Youknowit7*7",
-  database: "tracker_dev",
+  database: "tracker1_dev",
   hostname: "localhost",
   pool_size: 10

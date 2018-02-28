@@ -1,7 +1,7 @@
-defmodule Tracker.Repo.Migrations.Updatetaskdetails do
+defmodule Tracker.Repo.Migrations.RenameTasks do
   use Ecto.Migration
 
-  #def change do
+  def change do
    #alter table(:taskdetails) do
      # modify :time, :time, null: false
     #create table(:tasks) do
@@ -14,5 +14,5 @@ defmodule Tracker.Repo.Migrations.Updatetaskdetails do
     #timestamps() 
     #end
     rename table("tasks"), to: table("taskdetails") 
-  #end
+  end
 end
